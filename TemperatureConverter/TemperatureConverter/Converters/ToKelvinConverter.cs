@@ -1,27 +1,29 @@
 ﻿using TemperatureConverter.Enums;
 
-namespace TemperatureConverter.Converters
-{
-    public class ToKelvinConverter : ConverterBase
-    {
-        public ToKelvinConverter() : base(Temperature.Kelvin) { }
+namespace TemperatureConverter.Converters;
 
-        protected override Dictionary<Temperature, Func<double, double>> ConvertFunctionBySupportedTemperature => new()
+public class ToKelvinConverter : ConverterBase
+{
+    public ToKelvinConverter() : base(TemperatureScale.Kelvin)
+    {
+    }
+
+    protected override Dictionary<TemperatureScale, Func<double, double>> ConvertFunctionBySupportedTemperature =>
+        new()
         {
-            { Temperature.Fahrenheit, FromFahrenheit },
-            { Temperature.Celsius, FromCelsius }
+            { TemperatureScale.Fahrenheit, FromFahrenheit },
+            { TemperatureScale.Celsius, FromCelsius }
         };
 
-        protected double FromFahrenheit(double fahrenheit)
-        {
-            var kelvin = 273.5 + (fahrenheit - 32) * (5 / 9);
-            return kelvin;
-        }
+    private static double FromFahrenheit(double fahrenheit)
+    {
+        var kelvin = (fahrenheit + 459.67) * (5.0 / 9.0);
+        return kelvin;
+    }
 
-        protected double FromCelsius(double celsius)
-        {
-            var kelvin = celsius + 273.15;
-            return kelvin;
-        }
+    private static double FromCelsius(double celsius)
+    {
+        var kelvin = celsius + 273.15;
+        return kelvin;
     }
 }

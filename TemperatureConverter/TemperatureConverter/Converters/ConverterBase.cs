@@ -1,37 +1,36 @@
 ﻿using TemperatureConverter.Enums;
 using TemperatureConverter.Exceptions;
 
-namespace TemperatureConverter.Converters
+namespace TemperatureConverter.Converters;
+
+public abstract class ConverterBase
 {
-    public abstract class ConverterBase
+    private readonly TemperatureScale _targetTemperature;
+
+    protected abstract Dictionary<TemperatureScale, Func<double, double>> ConvertFunctionBySupportedTemperature { get; }
+
+    protected ConverterBase(TemperatureScale targetTemperature)
     {
-        private readonly Temperature _targetTemperature;
+        _targetTemperature = targetTemperature;
+    }
 
-        protected abstract Dictionary<Temperature, Func<double, double>> ConvertFunctionBySupportedTemperature { get; }
+    public double Convert(double temperature, TemperatureScale sourceTemperature)
+    {
+        Validate(sourceTemperature);
+        var convertedTemperature = ConvertFunctionBySupportedTemperature[sourceTemperature](temperature);
+        return Math.Round(convertedTemperature, 2);
+    }
 
-        public ConverterBase(Temperature targetTemperature)
+    private void Validate(TemperatureScale sourceTemperature)
+    {
+        if (sourceTemperature == _targetTemperature)
         {
-            _targetTemperature = targetTemperature;
+            throw new TemperatureConverterValidationException("Converting to the same temperature is rather pointless, no?");
         }
 
-        public double Convert(double temperature, Temperature sourceTemperature)
+        if (!ConvertFunctionBySupportedTemperature.ContainsKey(sourceTemperature))
         {
-            Validate(sourceTemperature);
-            var convertedTemperature = ConvertFunctionBySupportedTemperature[sourceTemperature](temperature);
-            return convertedTemperature;
-        }
-
-        private void Validate(Temperature sourceTemperature)
-        {
-            if (sourceTemperature == _targetTemperature)
-            {
-                throw new TemperatureConverterValidationException("Converting to the same temperature is rather pointless, no?");
-            }
-
-            if (!ConvertFunctionBySupportedTemperature.ContainsKey(sourceTemperature))
-            {
-                throw new TemperatureConverterValidationException($"Conversion from {sourceTemperature} to {_targetTemperature} is not supported");
-            }
+            throw new TemperatureConverterValidationException($"Conversion from {sourceTemperature} to {_targetTemperature} is not supported");
         }
     }
 }

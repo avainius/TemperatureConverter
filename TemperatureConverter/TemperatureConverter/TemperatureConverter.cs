@@ -2,41 +2,40 @@
 using TemperatureConverter.Enums;
 using TemperatureConverter.Exceptions;
 
-namespace TemperatureConverter
+namespace TemperatureConverter;
+
+public static class TemperatureConverter
 {
-    public static class TemperatureConverter
-	{
-		private static Dictionary<Temperature, ConverterBase> _temperatureConvertersByTemperature = new Dictionary<Temperature, ConverterBase>()
-		{
-			{ Temperature.Celsius, new ToCelsiusConverter() },
-			{ Temperature.Fahrenheit, new ToFahrenheitConverter() },
-			{ Temperature.Kelvin, new ToKelvinConverter() },
-		};
+    private static readonly Dictionary<TemperatureScale, ConverterBase> TemperatureConvertersByTemperature = new()
+    {
+        { TemperatureScale.Celsius, new ToCelsiusConverter() },
+        { TemperatureScale.Fahrenheit, new ToFahrenheitConverter() },
+        { TemperatureScale.Kelvin, new ToKelvinConverter() },
+    };
 
-		public static double Convert(double temperature, Temperature convertFrom, Temperature convertTo)
-		{
-			Validate(convertFrom, convertTo);
-			var result = _temperatureConvertersByTemperature[convertTo].Convert(temperature, convertFrom);
+    public static double Convert(double temperature, TemperatureScale convertFrom, TemperatureScale convertTo)
+    {
+        Validate(convertFrom, convertTo);
+        var convertedTemperature = TemperatureConvertersByTemperature[convertTo].Convert(temperature, convertFrom);
 
-			return result;
-		}
+        return convertedTemperature;
+    }
 
-		private static void Validate(Temperature convertFrom, Temperature convertTo)
+    private static void Validate(TemperatureScale convertFrom, TemperatureScale convertTo)
+    {
+        if (!Enum.IsDefined(convertTo))
         {
-			if (!Enum.IsDefined(convertTo))
-			{
-				throw new TemperatureConverterValidationException($"Conversion target {convertTo} is not a supported");
-			}
+            throw new TemperatureConverterValidationException($"Temperature {convertTo} is not defined");
+        }
 
-			if (!Enum.IsDefined(convertFrom))
-			{
-				throw new TemperatureConverterValidationException($"Conversion source {convertTo} is not a supported");
-			}
+        if (!Enum.IsDefined(convertFrom))
+        {
+            throw new TemperatureConverterValidationException($"Temperature {convertFrom} is not defined");
+        }
 
-			if (!_temperatureConvertersByTemperature.ContainsKey(convertTo))
-			{
-				throw new TemperatureConverterValidationException($"Converting to {convertTo} is not supported");
-			}
-		}
-	}
+        if (!TemperatureConvertersByTemperature.ContainsKey(convertTo))
+        {
+            throw new TemperatureConverterValidationException($"Converting to {convertTo} is not supported");
+        }
+    }
 }

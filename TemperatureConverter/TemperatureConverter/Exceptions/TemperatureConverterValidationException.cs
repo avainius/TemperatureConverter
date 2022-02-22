@@ -1,9 +1,8 @@
-﻿namespace TemperatureConverter.Exceptions
+﻿namespace TemperatureConverter.Exceptions;
+
+public class TemperatureConverterValidationException : Exception
 {
-    public class TemperatureConverterValidationException : Exception
+    public TemperatureConverterValidationException(string? message) : base(message)
     {
-        public TemperatureConverterValidationException(string? message) : base(message)
-        {
-        }
     }
 }
