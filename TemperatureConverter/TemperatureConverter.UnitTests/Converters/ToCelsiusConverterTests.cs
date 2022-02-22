@@ -43,7 +43,7 @@ public class ToCelsiusConverterTests
     public void Convert_When_SameTemperatureScaleProvided_Expect_ExceptionIsThrown()
     {
         var expectedExceptionMessage = "Converting to the same temperature is rather pointless, no?";
-        var actualException = Assert.ThrowsException<TemperatureConverterValidationException>(
+        var actualException = Assert.ThrowsException<ValidationException>(
             () => _converter.Convert(_fixture.Create<double>(), TemperatureScale.Celsius));
 
         Assert.AreEqual(expectedExceptionMessage, actualException.Message);
@@ -53,7 +53,7 @@ public class ToCelsiusConverterTests
     public void Convert_When_UnsupportedTemperatureScaleProvided_Expect_ExceptionIsThrown()
     {
         var expectedExceptionMessage = $"Conversion from {TemperatureScale.UnsupportedTemperatureScale} to {TemperatureScale.Celsius} is not supported";
-        var actualException = Assert.ThrowsException<TemperatureConverterValidationException>(
+        var actualException = Assert.ThrowsException<ValidationException>(
             () => _converter.Convert(_fixture.Create<double>(), TemperatureScale.UnsupportedTemperatureScale));
 
         Assert.AreEqual(expectedExceptionMessage, actualException.Message);

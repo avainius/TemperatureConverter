@@ -25,17 +25,17 @@ public static class TemperatureConverter
     {
         if (!Enum.IsDefined(convertTo))
         {
-            throw new TemperatureConverterValidationException($"Temperature {convertTo} is not defined");
+            throw new ValidationException($"Target scale {convertTo} is not defined");
         }
 
         if (!Enum.IsDefined(convertFrom))
         {
-            throw new TemperatureConverterValidationException($"Temperature {convertFrom} is not defined");
+            throw new ValidationException($"Source scale {convertFrom} is not defined");
         }
 
         if (!TemperatureConvertersByTemperature.ContainsKey(convertTo))
         {
-            throw new TemperatureConverterValidationException($"Converting to {convertTo} is not supported");
+            throw new ValidationException($"Converting to {convertTo} is not supported");
         }
     }
 }

@@ -36,8 +36,8 @@ public class TemperatureConverterTests
     public void Convert_When_UndefinedTemperatureSourceScaleProvided_Expect_ExceptionIsThrown()
     {
         var undefinedTemperatureValue = Enum.Parse<TemperatureScale>("-1");
-        var expectedExceptionMessage = $"Temperature {undefinedTemperatureValue} is not defined";
-        var actualException = Assert.ThrowsException<TemperatureConverterValidationException>(() =>
+        var expectedExceptionMessage = $"Source scale {undefinedTemperatureValue} is not defined";
+        var actualException = Assert.ThrowsException<ValidationException>(() =>
             TemperatureConverter.Convert(
                 _fixture.Create<double>(),
                 undefinedTemperatureValue,
@@ -50,8 +50,8 @@ public class TemperatureConverterTests
     public void Convert_When_UndefinedTemperatureTargetScaleProvided_Expect_ExceptionIsThrown()
     {
         var undefinedTemperatureValue = Enum.Parse<TemperatureScale>("-1");
-        var expectedExceptionMessage = $"Temperature {undefinedTemperatureValue} is not defined";
-        var actualException = Assert.ThrowsException<TemperatureConverterValidationException>(() =>
+        var expectedExceptionMessage = $"Target scale {undefinedTemperatureValue} is not defined";
+        var actualException = Assert.ThrowsException<ValidationException>(() =>
             TemperatureConverter.Convert(
                 _fixture.Create<double>(),
                 _fixture.Create<TemperatureScale>(),
@@ -64,7 +64,7 @@ public class TemperatureConverterTests
     public void Convert_When_UnsupportedTemperatureScaleProvided_Expect_ExceptionIsThrown()
     {
         var expectedExceptionMessage = $"Converting to {TemperatureScale.UnsupportedTemperatureScale} is not supported";
-        var actualException = Assert.ThrowsException<TemperatureConverterValidationException>(() =>
+        var actualException = Assert.ThrowsException<ValidationException>(() =>
             TemperatureConverter.Convert(
                 _fixture.Create<double>(),
                 _fixture.Create<TemperatureScale>(),

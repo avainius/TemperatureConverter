@@ -25,12 +25,12 @@ public abstract class ConverterBase
     {
         if (sourceTemperature == _targetTemperature)
         {
-            throw new TemperatureConverterValidationException("Converting to the same temperature is rather pointless, no?");
+            throw new ValidationException("Converting to the same temperature is rather pointless, no?");
         }
 
         if (!ConvertFunctionBySupportedTemperature.ContainsKey(sourceTemperature))
         {
-            throw new TemperatureConverterValidationException($"Conversion from {sourceTemperature} to {_targetTemperature} is not supported");
+            throw new ValidationException($"Conversion from {sourceTemperature} to {_targetTemperature} is not supported");
         }
     }
 }
